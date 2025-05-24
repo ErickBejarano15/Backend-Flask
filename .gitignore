@@ -1,0 +1,2 @@
+echo "credentials.json" >> .gitignore
+echo "token.pickle" >> .gitignore
