@@ -1,2 +1,16 @@
-echo "credentials.json" >> .gitignore
-echo "token.pickle" >> .gitignore
+# Ignorar archivos de entorno
+.env
+
+# Ignorar credenciales de Google
+credentials.json
+token.pickle
+
+# Entorno virtual de Python
+venv/
+__pycache__/
+# Archivos sensibles
+
+token_b64.txt
+credenciales.json
+generar_token.py
+convertir_token.py

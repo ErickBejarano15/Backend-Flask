@@ -21,6 +21,8 @@ print(f"[email_sender] MAIL_RECEIVER = {os.getenv('MAIL_RECEIVER')!r}")
 SCOPES     = ['https://www.googleapis.com/auth/gmail.send']
 CREDS_FILE = 'credentials.json'
 TOKEN_FILE = 'token.pickle'
+os.system("python decode_token.py")
+
 
 def get_gmail_service():
     creds = None
@@ -39,12 +41,17 @@ def get_gmail_service():
 
     return build('gmail', 'v1', credentials=creds)
 
-def send_email(nombre, reply_to, asunto, mensaje):
+def send_email(nombre, reply_to, asunto, mensaje, celular):
     remitente = os.getenv('MAIL_SENDER')
     destino   = os.getenv('MAIL_RECEIVER')
     service   = get_gmail_service()
 
-    cuerpo   = f"Nombre: {nombre}\nCorreo de vuelta: {reply_to}\n\n{mensaje}"
+    cuerpo = (
+        f"Nombre: {nombre}\n"
+        f"Correo de vuelta: {reply_to}\n"
+        f"Celular: {celular}\n\n"
+        f"{mensaje}"
+    )
     mime_msg = MIMEText(cuerpo, 'plain')
     mime_msg['to']      = destino
     mime_msg['from']    = remitente
@@ -52,3 +59,4 @@ def send_email(nombre, reply_to, asunto, mensaje):
 
     raw = base64.urlsafe_b64encode(mime_msg.as_bytes()).decode()
     service.users().messages().send(userId='me', body={'raw': raw}).execute()
+

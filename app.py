@@ -28,17 +28,18 @@ CORS(app, origins=["https://novaarquitectura.com.co"])
 
 @app.route('/api/contact', methods=['POST'])
 def contact():
-    data = request.get_json() or {}
-    nombre  = data.get('nombre', '').strip()
-    correo  = data.get('correo', '').strip()
-    asunto  = data.get('asunto', '').strip()
-    mensaje = data.get('mensaje', '').strip()
+    data = request.json
+    nombre = data.get("nombre")
+    correo = data.get("correo")
+    asunto = data.get("asunto")
+    mensaje = data.get("mensaje")
+    celular = data.get("celular")
 
-    if not all([nombre, correo, asunto, mensaje]):
+    if not all([nombre, correo, asunto, celular, mensaje]):
         return jsonify({'status': 'error', 'error': 'Faltan campos obligatorios'}), 400
 
     try:
-        send_email(nombre, correo, asunto, mensaje)
+        send_email(nombre, correo, asunto, celular, mensaje)
         return jsonify({'status': 'ok'}), 200
     except Exception as e:
         traceback.print_exc()
